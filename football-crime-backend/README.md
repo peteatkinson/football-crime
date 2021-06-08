@@ -1,4 +1,4 @@
-# commet-be
+# football-crime-backend
 
 🤲 Free as in speech: available under the APLv2 license.
 

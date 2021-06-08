@@ -5,14 +5,21 @@
   "engines": {
     "node": ">= 14.16 <15"
   },
+  "_moduleAliases": {
+    "@": "build"
+  },
   "devDependencies": {
     "@types/jest": "~26.0.23",
     "@types/node": "~14.14.45",
-    "@typescript-eslint/eslint-plugin": "~4.25.0",
+    "@typescript-eslint/eslint-plugin": "^4.26.1",
     "@typescript-eslint/parser": "~4.25.0",
-    "eslint": "~7.27.0",
+    "eslint": "^7.28.0",
     "eslint-config-prettier": "~8.3.0",
+    "eslint-config-standard-with-typescript": "^20.0.0",
+    "eslint-plugin-import": "^2.23.4",
     "eslint-plugin-jest": "~24.3.6",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^4.3.1",
     "jest": "~27.0.3",
     "prettier": "~2.3.0",
     "rimraf": "~3.0.2",
@@ -21,7 +28,7 @@
     "typescript": "~4.3.2"
   },
   "scripts": {
-    "start": "node build/src/main.js",
+    "start": "node build/server.js",
     "clean": "rimraf coverage build tmp",
     "prebuild": "npm run lint",
     "build": "tsc -p tsconfig.release.json",
@@ -41,6 +48,7 @@
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "lusca": "^1.7.0",
+    "module-alias": "^2.2.2",
     "tslib": "~2.2.0"
   },
   "volta": {
