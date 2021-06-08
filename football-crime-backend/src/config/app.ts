@@ -1,16 +1,12 @@
 
 /**
- * Middlware imports
+ * App Configuration
  */
-import setupMiddlewares from './middlewares'
-import setupRoutes from './routes'
+import AppBuilder from './builder'
 
-import express from 'express'
-
-const app = express()
-
-// Express configuration
-setupMiddlewares(app)
-setupRoutes(app)
+const app = new AppBuilder()
+  .withMiddleware()
+  .withRoutes()
+  .build()
 
 export default app
