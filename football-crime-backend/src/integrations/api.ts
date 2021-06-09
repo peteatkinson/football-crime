@@ -9,6 +9,7 @@ export class ApiClient {
 
   protected async get (path: string, queryParams?: { [key: string]: unknown }, headers?: { [key: string]: string }): Promise<Response> {
     const url = new URL(path, this.baseUrl)
+
     if (queryParams) {
       Object.keys(queryParams).forEach((key) => {
         const value = queryParams[key]
