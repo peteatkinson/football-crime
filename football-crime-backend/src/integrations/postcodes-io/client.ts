@@ -1,5 +1,5 @@
 import { PostcodeResponse, IPostcode } from './types'
-import fetch, { Response } from 'node-fetch'
+import { ApiClient } from '../api'
 
 interface IPostcodesIOClient {
   lookup: (postcode: string) => Promise<PostcodeResponse<IPostcode>>
@@ -7,13 +7,11 @@ interface IPostcodesIOClient {
   search: (postcode: string) => Promise<PostcodeResponse<string[]>>
 }
 
-class PostCodesIOClient implements IPostcodesIOClient {
+class PostCodesIOClient extends ApiClient implements IPostcodesIOClient {
   private static _instance?: PostCodesIOClient
 
-  public baseUrl: string
-
   private constructor () {
-    this.baseUrl = 'https://api.postcodes.io'
+    super('https://api.postcodes.io')
   }
 
   static get instance () {
@@ -69,19 +67,6 @@ class PostCodesIOClient implements IPostcodesIOClient {
 
     // return the result
     return lookupResult
-  }
-
-  async get (path: string, queryParams?: { [key: string]: unknown }): Promise<Response> {
-    const url = new URL(path, this.baseUrl)
-
-    if (queryParams) {
-      Object.keys(queryParams).forEach((key) => {
-        const value = queryParams[key]
-        url.searchParams.set(key, (value as any).toString())
-      })
-    }
-
-    return await fetch(url.toString())
   }
 }
 
