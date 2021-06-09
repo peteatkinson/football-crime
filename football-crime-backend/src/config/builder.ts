@@ -1,5 +1,6 @@
 import express, { Router, Request, Response, NextFunction, Express, json } from 'express'
 import compress from 'compression'
+import * as homeController from '@/controllers/home'
 
 class AppBuilder {
   private readonly app: Express
@@ -44,6 +45,7 @@ class AppBuilder {
    */
   withRoutes (): AppBuilder {
     const router = Router()
+    router.get('/home', homeController.index)
     this.app.use('/api', router)
     return this
   }
