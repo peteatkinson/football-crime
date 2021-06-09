@@ -2,7 +2,7 @@ import express, { Router, Request, Response, NextFunction, Express, json } from 
 import compress from 'compression'
 
 class AppBuilder {
-  private app: Express
+  private readonly app: Express
 
   constructor () {
     // initalise new express instance
