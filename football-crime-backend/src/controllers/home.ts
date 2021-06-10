@@ -1,9 +1,9 @@
 import { Request, Response } from 'express'
 
-import { FootballDataClient } from '@/integrations/football-data/client'
+import { FootballService } from '@/services/football'
 
 export const index = async (req: Request, res: Response) => {
-  const result = await FootballDataClient.getCompetitionTeams('2020')
+  const result = await FootballService.getStadiums('2020')
 
   res.status(200).send(JSON.stringify(result))
 }
