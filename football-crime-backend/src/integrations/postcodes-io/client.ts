@@ -1,8 +1,8 @@
-import { PostcodeResponse, IBulkLookup } from './types'
+import { PostcodeResponse } from './types'
 import { ApiClient } from '../api'
 
 interface IPostcodesIOClient {
-  bulkLookup: (postcodes: string[]) => Promise<PostcodeResponse<IBulkLookup>>
+  bulkLookup: (postcodes: string[]) => Promise<PostcodeResponse>
 }
 
 class PostCodesIOClient extends ApiClient implements IPostcodesIOClient {
@@ -16,14 +16,13 @@ class PostCodesIOClient extends ApiClient implements IPostcodesIOClient {
     return this._instance || (this._instance = new this())
   }
 
-  async bulkLookup (postcodes: string[]): Promise<PostcodeResponse<IBulkLookup>> {
+  async bulkLookup (postcodes: string[]): Promise<PostcodeResponse> {
     // call the lookup endpoint
     const response = await this.post('/postcodes/', {
       postcodes: postcodes
     })
 
-    console.log(response)
-    let bulkPostcodes: PostcodeResponse<IBulkLookup> = null
+    let bulkPostcodes: PostcodeResponse = null
 
     // if status code is 200 then parse the json
     if (response.ok) {

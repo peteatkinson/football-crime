@@ -23,16 +23,13 @@ export class ApiClient {
 
   protected async post (path: string, payload: any) {
     const url = new URL(path, this.baseUrl)
-    console.log(url.toString())
-    console.log(JSON.stringify(payload))
-
-    const data = {
-      postcodes: ['TS1 4JS']
-    }
 
     return await fetch(url.toString(), {
       method: 'POST',
-      body: JSON.stringify(data)
+      body: JSON.stringify(payload),
+      headers: {
+        'Content-Type': 'application/json'
+      }
     })
   }
 }

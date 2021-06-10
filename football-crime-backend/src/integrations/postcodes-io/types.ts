@@ -25,9 +25,9 @@ export interface IPostcode {
   codes: ICodes
 }
 
-export interface IBulkLookup {
+export class BulkPostcode {
   query: string
-  result: IPostcode[]
+  result: IPostcode
 }
 
 export interface ICodes {
@@ -44,7 +44,7 @@ export interface ICodes {
   lau2: string
 }
 
-export class PostcodeResponse<TResult> {
+export class PostcodeResponse {
   status: number
-  result: TResult
+  result: BulkPostcode[]
 }
