@@ -16,8 +16,8 @@ class FootballService {
 
     /**
      * Maps the address field into street-postcode level data
-     * @param address 
-     * @returns 
+     * @param address
+     * @returns
      */
     const mapStadiumAddress = (address: string): any => {
       const splitIndex = address.lastIndexOf(' ', address.lastIndexOf(' ') - 1)
@@ -27,12 +27,12 @@ class FootballService {
       }
     }
 
-  /**
-   * Sort function to sort by venue name in alphabetical order 
-   * @param a 
-   * @param b 
-   * @returns 
-   */
+    /**
+    * Sort function to sort by venue name in alphabetical order
+    * @param a
+    * @param b
+    * @returns
+    */
     const sortbyName = (a: any, b: any): number => {
       const nameA = a.name.toUpperCase()
       const nameB = b.name.toUpperCase()
