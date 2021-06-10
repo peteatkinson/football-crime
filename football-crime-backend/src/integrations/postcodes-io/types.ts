@@ -25,6 +25,11 @@ export interface IPostcode {
   codes: ICodes
 }
 
+export interface IBulkLookup {
+  query: string
+  result: IPostcode[]
+}
+
 export interface ICodes {
   admin_district: string
   admin_county: string

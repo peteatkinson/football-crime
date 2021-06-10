@@ -1,4 +1,5 @@
 import fetch, { Response } from 'node-fetch'
+import { URL } from 'url'
 
 export class ApiClient {
   protected baseUrl: string
@@ -18,5 +19,20 @@ export class ApiClient {
     }
 
     return await fetch(url.toString(), { method: 'GET', headers: headers })
+  }
+
+  protected async post (path: string, payload: any) {
+    const url = new URL(path, this.baseUrl)
+    console.log(url.toString())
+    console.log(JSON.stringify(payload))
+
+    const data = {
+      postcodes: ['TS1 4JS']
+    }
+
+    return await fetch(url.toString(), {
+      method: 'POST',
+      body: JSON.stringify(data)
+    })
   }
 }

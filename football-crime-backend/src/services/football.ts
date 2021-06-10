@@ -1,73 +1,39 @@
 import { FootballDataClient } from '@/integrations/football-data/client'
+import { PostCodesIOClient } from '@/integrations/postcodes-io/client'
 
-class FootballService {
-  private static _instance?: FootballService
+const getStadiumsBySeason = async (season: string): Promise<any> => {
+  const result = await FootballDataClient.getTeams(season)
 
-  private constructor () { }
+  if (result && result.teams.length > 0) {
+    // map the teams result into stadium/venues with relationships to a specific team
+    // get all the postcodes to lookup
+    const postcodes = result.teams.map((team) => {
+      const teamAddress = team.address
+      const index = teamAddress.lastIndexOf(' ', teamAddress.lastIndexOf(' ') - 1)
+      const postcode = teamAddress.substring(index).trim()
+      return postcode
+    })
 
-  static get instance () {
-    return this._instance || (this._instance = new this())
+    const bulkPostcodes = await PostCodesIOClient.bulkLookup(postcodes)
+    console.log(bulkPostcodes)
   }
 
-  async getStadiums (season: string): Promise<any> {
-    const result = await FootballDataClient.getCompetitionTeams(season)
-
-    let stadiums = []
-
-    /**
-     * Maps the address field into street-postcode level data
-     * @param address
-     * @returns
-     */
-    const mapStadiumAddress = (address: string): any => {
-      const splitIndex = address.lastIndexOf(' ', address.lastIndexOf(' ') - 1)
-      return {
-        street: address.substring(0, splitIndex).trim(),
-        postcode: address.substring(splitIndex).trim()
-      }
-    }
-
-    /**
-    * Sort function to sort by venue name in alphabetical order
-    * @param a
-    * @param b
-    * @returns
-    */
-    const sortbyName = (a: any, b: any): number => {
-      const nameA = a.name.toUpperCase()
-      const nameB = b.name.toUpperCase()
-      return (nameA < nameB) ? -1 : (nameA > nameB) ? 1 : 0
-    }
-
-    if (result && result.teams.length > 0) {
-      // map the teams result into stadium/venues with relationships to a specific team
-      stadiums = result.teams.map((data) => {
-        const address = mapStadiumAddress(data.address)
-
-        return {
-          name: data.venue,
-          team: {
-            id: data.id,
-            name: data.name,
-            shortName: data.shortName,
-            founded: data.founded,
-            crestUrl: data.crestUrl,
-            tla: data.tla
-          },
-          address: {
-            street: address.street,
-            postcode: address.postcode
-          }
-        }
-      })
-
-      // sort stadiums in alphabetical order by venue name
-      stadiums = stadiums.sort(sortbyName)
-    }
-
-    return stadiums
-  }
+  return []
 }
 
-const service = FootballService.instance
-export { service as FootballService }
+const getHomeMatchesByTeam = async (season: string, team: number) => {
+  const data = await FootballDataClient.getMatches(season)
+
+  const homeMatches = []
+
+  if (data && data.count > 0) {
+    homeMatches.push(data.matches.filter((match) => match.homeTeam.id === team))
+  }
+
+  return homeMatches
+}
+
+export {
+  getStadiumsBySeason,
+  getHomeMatchesByTeam
+}
