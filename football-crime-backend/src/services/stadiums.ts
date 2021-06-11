@@ -3,6 +3,11 @@ import { getAddressesByPostcodes } from '@/services/address'
 
 import { Stadium, Address } from '@/presentation/models/football'
 
+/**
+ * Retrieves stadium information filtered by season
+ * @param season - string value 2017-2021
+ * @returns an array of Stadiums
+ */
 const getStadiumsBySeason = async (season: string): Promise<Stadium[]> => {
   // loookup the football teams by season/year
   const teams = await FootballDataClient.getTeams(season)

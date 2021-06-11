@@ -1,6 +1,11 @@
 import { Address } from '@/presentation/models/football'
 import { PostCodesIOClient } from '@/clients/postcodes-io/client'
 
+/**
+ * Retrieves bulk addresses by bulk postcodes
+ * @param postcodes - an array of postcodes
+ * @returns a collection of Addresses
+ */
 const getAddressesByPostcodes = async (postcodes: string[]): Promise<Address[]> => {
   // perform a bulk lookup for a collection of postcodes
   const response = await PostCodesIOClient.bulkLookup(postcodes)

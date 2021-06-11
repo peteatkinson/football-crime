@@ -4,7 +4,13 @@ import { getStadiumsBySeason } from '@/services/stadiums'
 import { InMemoryCache } from '@/utils/cache'
 import { Crimes, StadiumCrimes } from '@/presentation/models/crime'
 
-const getStadiumCrimesByYearMonth = async (year: string, month: string): Promise<any> => {
+/**
+ * Retrieves a list of stadium crimes filtered by year/month
+ * @param year in format XXXX
+ * @param month in format XX
+ * @returns StadiumCrimes - a collection of stadium crimes
+ */
+const getStadiumCrimesByYearMonth = async (year: string, month: string): Promise<StadiumCrimes[]> => {
   const date = `${year}-${month}`
 
   const cacheKey: string = `stadium-crimes:${date}`

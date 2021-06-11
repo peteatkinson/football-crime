@@ -1,6 +1,14 @@
 import { DataPoliceClient } from '@/clients/data-police-uk/client'
 import { Crimes, Crime } from '@/presentation/models/crime'
 
+/**
+ * Retrieves the crime statistics for a particular location
+ * filtered by latitude, longitude and date (in format year-month|XXXX-XX)
+ * @param lat
+ * @param long 
+ * @param date 
+ * @returns a collection of crimes
+ */
 const getCrimesByLocation = async (lat: number, long: number, date: string): Promise<Crimes> => {
   // lookup the collection of crimes associated with lat/long and year/month
   const crimes = await DataPoliceClient.lookupByLongLat(date, long, lat)
