@@ -1,6 +1,5 @@
 import express, { Router, Request, Response, NextFunction, Express, json } from 'express'
-import compress from 'compression'
-import * as homeController from '@/controllers/home'
+import * as stadiumsController from '@/controllers/stadiums'
 
 class AppBuilder {
   private readonly app: Express
@@ -19,20 +18,20 @@ class AppBuilder {
 
     // define request Content-Type
     const contentType = (req: Request, res: Response, next: NextFunction) => {
-      res.type('json')
+      res.type('application/json')
       next()
     }
 
-    // define CORS headers
+    // // define CORS headers
     const cors = (req: Request, res: Response, next: NextFunction) => {
       res.set('access-control-allow-origin', '*')
       res.set('access-control-allow-headers', '*')
       res.set('access-control-allow-methods', '*')
       next()
     }
+
     // register the Express Middleware
     this.app.use(bodyParser)
-    this.app.use(compress)
     this.app.use(cors)
     this.app.use(contentType)
 
@@ -45,7 +44,7 @@ class AppBuilder {
    */
   withRoutes (): AppBuilder {
     const router = Router()
-    router.get('/home', homeController.index)
+    router.get('/stadiums', stadiumsController.getStadiums)
     this.app.use('/api', router)
     return this
   }

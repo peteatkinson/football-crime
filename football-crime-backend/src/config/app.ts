@@ -5,7 +5,7 @@
 import AppBuilder from './builder'
 
 const app = new AppBuilder()
-  // .withMiddleware()
+  .withMiddleware()
   .withRoutes()
   .build()
 
