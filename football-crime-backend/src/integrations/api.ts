@@ -17,7 +17,7 @@ export class ApiClient {
         url.searchParams.set(key, (value as any).toString())
       })
     }
-
+    console.log(url.toString())
     return await fetch(url.toString(), { method: 'GET', headers: headers })
   }
 

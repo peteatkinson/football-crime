@@ -1,11 +1,9 @@
 import { ICompetitionMatches, ICompetitionTeams } from './types'
 import { ApiClient } from '../api'
 
-import { InMemoryCache } from '@/cache'
-
 interface IFootballDataClient {
   getTeams: (season: string) => Promise<ICompetitionTeams>
-  getMatches: (seaso: string) => Promise<ICompetitionMatches>
+  getMatches: (season: string) => Promise<ICompetitionMatches>
 }
 
 class FootballDataClient extends ApiClient implements IFootballDataClient {
@@ -31,12 +29,6 @@ class FootballDataClient extends ApiClient implements IFootballDataClient {
       season: season
     }
 
-    const cache = InMemoryCache.get<ICompetitionTeams>(`competition-teams:season${season}`)
-
-    if (cache) {
-      return cache
-    }
-
     // call the lookup endpoint
     const response = await this.get('/v2/competitions/2021/teams', queryParams, this.httpHeaders)
 
@@ -47,11 +39,6 @@ class FootballDataClient extends ApiClient implements IFootballDataClient {
       const json = await response.text()
 
       teams = JSON.parse(json)
-
-      if (json !== '') {
-        // if we dont have an empty response
-        InMemoryCache.set(`competition-teams:season${season}`, teams)
-      }
     }
 
     return teams
@@ -62,13 +49,6 @@ class FootballDataClient extends ApiClient implements IFootballDataClient {
       season: season
     }
 
-    const cache = InMemoryCache.get<ICompetitionMatches>(`competition-teams:matches${season}`)
-
-    if (cache) {
-      console.log('getting fro cache')
-      return cache
-    }
-
     const response = await this.get('/v2/competitions/2021/matches', queryParams, this.httpHeaders)
 
     let matches: ICompetitionMatches = null
@@ -77,12 +57,6 @@ class FootballDataClient extends ApiClient implements IFootballDataClient {
       const json = await response.text()
 
       matches = JSON.parse(json)
-
-      if (json !== '') {
-        console.log('caching response')
-        // if we dont have an empty response
-        InMemoryCache.set(`competition-teams:matches${season}`, matches)
-      }
     }
 
     return matches
