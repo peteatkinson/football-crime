@@ -1,5 +1,5 @@
-import { Address } from '@/models/football'
-import { PostCodesIOClient } from '@/integrations/postcodes-io/client'
+import { Address } from '@/presentation/models/football'
+import { PostCodesIOClient } from '@/clients/postcodes-io/client'
 
 const getAddressesByPostcodes = async (postcodes: string[]): Promise<Address[]> => {
   // perform a bulk lookup for a collection of postcodes

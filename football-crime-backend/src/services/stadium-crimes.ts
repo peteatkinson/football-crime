@@ -2,7 +2,7 @@ import { getCrimesByLocation } from '@/services/crime'
 import { getStadiumsBySeason } from '@/services/stadiums'
 
 import { InMemoryCache } from '@/utils/cache'
-import { Crimes, StadiumCrimes } from '@/models/crime'
+import { Crimes, StadiumCrimes } from '@/presentation/models/crime'
 
 const getStadiumCrimesByYearMonth = async (year: string, month: string): Promise<any> => {
   const date = `${year}-${month}`

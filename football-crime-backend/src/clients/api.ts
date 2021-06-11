@@ -8,6 +8,13 @@ export class ApiClient {
     this.baseUrl = baseUrl
   }
 
+  /**
+   * Performs a HTTP GET request
+   * @param path
+   * @param queryParams
+   * @param headers
+   * @returns
+   */
   protected async get (path: string, queryParams?: { [key: string]: unknown }, headers?: { [key: string]: string }): Promise<Response> {
     const url = new URL(path, this.baseUrl)
 
@@ -17,10 +24,16 @@ export class ApiClient {
         url.searchParams.set(key, (value as any).toString())
       })
     }
-    console.log(url.toString())
+
     return await fetch(url.toString(), { method: 'GET', headers: headers })
   }
 
+  /**
+   * Perform a HTTP POST request
+   * @param path
+   * @param payload
+   * @returns
+   */
   protected async post (path: string, payload: any) {
     const url = new URL(path, this.baseUrl)
 

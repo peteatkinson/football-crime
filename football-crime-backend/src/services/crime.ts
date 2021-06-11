@@ -1,5 +1,5 @@
-import { DataPoliceClient } from '@/integrations/data-police-uk/client'
-import { Crimes, Crime } from '@/models/crime'
+import { DataPoliceClient } from '@/clients/data-police-uk/client'
+import { Crimes, Crime } from '@/presentation/models/crime'
 
 const getCrimesByLocation = async (lat: number, long: number, date: string): Promise<Crimes> => {
   // lookup the collection of crimes associated with lat/long and year/month

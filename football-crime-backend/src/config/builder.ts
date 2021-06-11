@@ -1,5 +1,5 @@
 import express, { Router, Request, Response, NextFunction, Express, json } from 'express'
-import * as stadiumCrimesController from '@/controllers/stadium-crimes'
+import * as stadiumCrimesController from '@/presentation/controllers/stadium-crimes'
 
 class AppBuilder {
   private readonly app: Express

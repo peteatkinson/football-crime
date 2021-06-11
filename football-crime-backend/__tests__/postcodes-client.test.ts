@@ -1,4 +1,4 @@
-import { PostCodesIOClient } from '../src/integrations/postcodes-io/client'
+import { PostCodesIOClient } from './clients/postcodes-io/client'
 
 describe('postcodes client test suite', () => {
   it('should bulk lookup postcodes', async () => {

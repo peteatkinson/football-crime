@@ -1,7 +1,7 @@
-import { FootballDataClient } from '@/integrations/football-data/client'
+import { FootballDataClient } from '@/clients/football-data/client'
 import { getAddressesByPostcodes } from '@/services/address'
 
-import { Stadium, Address } from '@/models/football'
+import { Stadium, Address } from '@/presentation/models/football'
 
 const getStadiumsBySeason = async (season: string): Promise<Stadium[]> => {
   // loookup the football teams by season/year
