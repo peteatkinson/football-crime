@@ -38,7 +38,7 @@ const getStadiumCrimesByYearMonth = async (year: string, month: string): Promise
   const crimes = await Promise.all(promises)
 
   // if there are any crimes
-  if (crimes.length > 0) {
+  if (crimes && crimes.length > 0) {
     // plug in each collection of crimes
     stadiumCrimes = stadiumCrimes.map((sc) => {
       // lookup the collection of crimes by matching on lat/long
