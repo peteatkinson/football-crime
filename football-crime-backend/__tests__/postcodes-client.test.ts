@@ -8,7 +8,7 @@ describe('postcodes client test suite', () => {
       'EC1N 8HN',
       'WC2E8QH'
     ]
-   
+
     const response = await PostCodesIOClient.bulkLookup(lookups)
 
     expect(response.status).toBe(200)
