@@ -1,11 +1,10 @@
 export class Stadium {
   id: number
   name: string
-  address: Address
-  constructor (id: number, name: string, address: Address) {
+  address?: Address
+  constructor (id: number, name: string) {
     this.id = id
     this.name = name
-    this.address = address
   }
 }
 
@@ -32,7 +31,7 @@ export class Address {
   lat?: number
 
   constructor (street: string, postcode: string) {
-    this.street = street
-    this.postcode = postcode
+    this.street = street.trim()
+    this.postcode = postcode.trim()
   }
 }

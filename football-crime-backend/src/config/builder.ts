@@ -1,5 +1,5 @@
 import express, { Router, Request, Response, NextFunction, Express, json } from 'express'
-import * as stadiumsController from '@/controllers/stadiums'
+import * as stadiumCrimesController from '@/controllers/stadium-crimes'
 
 class AppBuilder {
   private readonly app: Express
@@ -44,7 +44,7 @@ class AppBuilder {
    */
   withRoutes (): AppBuilder {
     const router = Router()
-    router.get('/stadiums', stadiumsController.getStadiums)
+    router.get('/stadium-crimes', stadiumCrimesController.getStadiumCrimesHandler)
     this.app.use('/api', router)
     return this
   }

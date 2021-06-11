@@ -1,56 +1,44 @@
 import { FootballDataClient } from '@/integrations/football-data/client'
-import { PostCodesIOClient } from '@/integrations/postcodes-io/client'
-
-import { InMemoryCache } from '@/cache'
+import { getAddressesByPostcodes } from '@/services/address'
 
 import { Stadium, Address } from '@/models/football'
 
-import { mapStadiumAddress, mapBulkPostCode } from '@/utils/football'
-
 const getStadiumsBySeason = async (season: string): Promise<Stadium[]> => {
-  const cache = InMemoryCache.get<Stadium[]>(`stadiums:season:${season}`)
-  if (cache) {
-    return cache
-  }
-
-  // lookup the teams
+  // loookup the football teams by season/year
   const teams = await FootballDataClient.getTeams(season)
 
   let stadiums: Stadium[] = []
 
-  // if we have any teams then
+  // if we have any teams in the collection then
   if (teams && teams.teams.length > 0) {
-    stadiums = teams.teams.map((team) => new Stadium(team.id, team.venue, mapStadiumAddress(team.address)))
+    // map each team into stadiums (id, venue, postcode and street)
+    stadiums = teams.teams.map((team) => {
+      const { id, venue, address } = team
 
-    // perfrom a bulk lookup for additional address information on stadiums
-    const addresses = await getAddressesByBulkPostcodes(stadiums.map((stadium) => stadium.address.postcode))
+      const stadium = new Stadium(id, venue)
 
-    // map stadiums with newly updated address data
-    stadiums = stadiums.map((stadium) => {
-      return {
-        id: stadium.id,
-        name: stadium.name,
-        address: Object.assign(stadium.address, addresses.find((address) => address.postcode === stadium.address.postcode))
-      }
-    }) as Stadium[]
+      // split on the 2nd last space to extract the postcode
+      // for example: The Walkers Stadium, Filbert Way Leicester LE2 7FL
+      // the left-most of the space maps to the street and the right-most part maps to the postcode
+      const index = address.lastIndexOf(' ', address.lastIndexOf(' ') - 1)
+      const postcode = address.substring(index)
+      const street = address.substring(0, index)
 
-    // cache the resulting stadiums collection
-    InMemoryCache.set(`stadiums:season:${season}`, stadiums)
+      stadium.address = new Address(street, postcode)
+      return stadium
+    })
+
+    // perform a bulk lookup on the postcodes to get additional location information about the stadium
+    const addresses = await getAddressesByPostcodes(stadiums.map((stadium) => stadium.address.postcode))
+
+    // plugin in each location into the stadiums collection
+    stadiums = stadiums.map((s) => {
+      s.address = Object.assign(s.address, addresses.find((address) => address.postcode === s.address.postcode))
+      return s
+    })
   }
 
   return stadiums
-}
-
-const getAddressesByBulkPostcodes = async (bulkPostcodes: string[]): Promise<Address[]> => {
-  const postcodes = await PostCodesIOClient.bulkLookup(bulkPostcodes)
-
-  let addresses: Address[] = []
-
-  if (postcodes && postcodes.result.length > 0) {
-    addresses = postcodes.result.map((postcode) => mapBulkPostCode(postcode))
-  }
-
-  return addresses
 }
 
 export {

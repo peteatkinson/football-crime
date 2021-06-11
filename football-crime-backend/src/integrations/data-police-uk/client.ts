@@ -40,11 +40,11 @@ class DataPoliceClient extends ApiClient implements IDataPoliceClient {
   async lookupByLongLat (date: string, long: number, lat: number): Promise<ICrime[]> {
     const queryParams: { [key: string]: unknown } = {
       date: date,
-      long: long,
+      lng: long,
       lat: lat
     }
 
-    const response = await this.get('/crimes-at-location', queryParams)
+    const response = await this.get('api/crimes-at-location', queryParams)
     let crimesResult: ICrime[] = null
 
     // if status code is 200 then parse the json
