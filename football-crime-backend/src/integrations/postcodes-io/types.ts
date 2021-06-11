@@ -25,6 +25,11 @@ export interface IPostcode {
   codes: ICodes
 }
 
+export class BulkPostcode {
+  query: string
+  result: IPostcode
+}
+
 export interface ICodes {
   admin_district: string
   admin_county: string
@@ -39,7 +44,7 @@ export interface ICodes {
   lau2: string
 }
 
-export class PostcodeResponse<TResult> {
+export class PostcodeResponse {
   status: number
-  result: TResult
+  result: BulkPostcode[]
 }

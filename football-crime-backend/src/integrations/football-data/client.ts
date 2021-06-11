@@ -1,8 +1,11 @@
-import { ICompetitionTeams } from './types'
+import { ICompetitionMatches, ICompetitionTeams } from './types'
 import { ApiClient } from '../api'
 
+import { InMemoryCache } from '@/cache'
+
 interface IFootballDataClient {
-  getCompetitionTeams: (season: string) => Promise<ICompetitionTeams>
+  getTeams: (season: string) => Promise<ICompetitionTeams>
+  getMatches: (seaso: string) => Promise<ICompetitionMatches>
 }
 
 class FootballDataClient extends ApiClient implements IFootballDataClient {
@@ -15,7 +18,7 @@ class FootballDataClient extends ApiClient implements IFootballDataClient {
   private constructor () {
     super('https://api.football-data.org')
     this.httpHeaders = {
-      'X-Auth-Token': '8d3f09c563e74fe3a430ff6b931babbd'
+      'X-Auth-Token': '6a61eb72affa483780eabc39ef79391a'
     }
   }
 
@@ -23,25 +26,66 @@ class FootballDataClient extends ApiClient implements IFootballDataClient {
     return this._instance || (this._instance = new this())
   }
 
-  async getCompetitionTeams (season: string): Promise<ICompetitionTeams> {
+  async getTeams (season: string): Promise<ICompetitionTeams> {
     const queryParams: { [key: string]: unknown } = {
       season: season
+    }
+
+    const cache = InMemoryCache.get<ICompetitionTeams>(`competition-teams:season${season}`)
+
+    if (cache) {
+      return cache
     }
 
     // call the lookup endpoint
     const response = await this.get('/v2/competitions/2021/teams', queryParams, this.httpHeaders)
 
-    let teamsResult: ICompetitionTeams = null
+    let teams: ICompetitionTeams = null
 
     // if status code is 200 then parse the json
     if (response.ok) {
       const json = await response.text()
 
-      teamsResult = JSON.parse(json)
+      teams = JSON.parse(json)
+
+      if (json !== '') {
+        // if we dont have an empty response
+        InMemoryCache.set(`competition-teams:season${season}`, teams)
+      }
     }
-    console.log(teamsResult)
-    // return the result
-    return teamsResult
+
+    return teams
+  }
+
+  async getMatches (season: string): Promise<ICompetitionMatches> {
+    const queryParams: { [key: string]: unknown } = {
+      season: season
+    }
+
+    const cache = InMemoryCache.get<ICompetitionMatches>(`competition-teams:matches${season}`)
+
+    if (cache) {
+      console.log('getting fro cache')
+      return cache
+    }
+
+    const response = await this.get('/v2/competitions/2021/matches', queryParams, this.httpHeaders)
+
+    let matches: ICompetitionMatches = null
+
+    if (response.ok) {
+      const json = await response.text()
+
+      matches = JSON.parse(json)
+
+      if (json !== '') {
+        console.log('caching response')
+        // if we dont have an empty response
+        InMemoryCache.set(`competition-teams:matches${season}`, matches)
+      }
+    }
+
+    return matches
   }
 }
 

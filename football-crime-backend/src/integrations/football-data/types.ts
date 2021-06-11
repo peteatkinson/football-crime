@@ -43,3 +43,27 @@ export interface ICompetitionTeams {
   teams: ITeam[]
   competition: ICompetition
 }
+
+export interface ICompetitionMatches {
+  count: number
+  competition: ICompetition
+  matches: IMatch[]
+}
+
+export interface IMatch {
+  id: number
+  season: ISeason
+  utcDate: string
+  status: string
+  matchday: number
+  stage: string
+  group: string
+  lastUpdated: string
+  homeTeam: IMatchTeam
+  awayTeam: IMatchTeam
+}
+
+export interface IMatchTeam {
+  id: number
+  name: string
+}
