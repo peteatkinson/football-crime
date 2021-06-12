@@ -2,13 +2,13 @@
   <div class="filters">
     <span class="filters__text filters__text-filter">Filters: </span>
     <vs-select
-      placeholder="Year"
       @change="handleSelectYear"
+      placeholder="Year"
       v-model="yearSelected"
     >
       <vs-option
         :key="`filter:year:${year}index:${index}`"
-        v-for="(year, index) in yearFilters"
+        v-for="(year, index) in years"
         :label="year.text"
         :value="year.value"
       >
@@ -17,23 +17,20 @@
     </vs-select>
 
     <vs-select
-      placeholder="Month"
       @change="handleSelectMonth"
+      placeholder="Month"
       v-model="monthSelected"
     >
       <vs-option
-        :key="`filter:year:${month}index:${index}`"
-        v-for="(month, index) in monthFilters"
+        :key="`filter:month:${month}index:${index}`"
+        v-for="(month, index) in months"
         :label="month.text"
         :value="month.value"
       >
         {{ month.text }}
       </vs-option>
     </vs-select>
-
-    <!-- <span class="filters__text filters__text-showing">{{
-      showingFiltersText
-    }}</span> -->
+    <span class="filters__text filters__text-showing">{{filterTotalCountText}}</span>
   </div>
 </template>
 
@@ -43,20 +40,28 @@ export default {
   props: {
     defaultMonth: String,
     defaultYear: String,
-    rows: Number,
+    totalCount: Number,
+    filterCallbackHandler: Function,
+  },
+  computed: {
+    filterTotalCountText() {
+      const month = this.months.find((m) => m.value == this.monthSelected).text;
+      const year = this.yearSelected;
+      return `Showing ${this.totalCount} results for ${month} ${year}`;
+    },
   },
   data() {
     return {
       yearSelected: "",
       monthSelected: "",
-      yearFilters: [
-        { value: 2017, text: "2017" },
-        { value: 2018, text: "2018" },
-        { value: 2019, text: "2019" },
-        { value: 2020, text: "2020" },
-        { value: 2021, text: "2021" },
+      years: [
+        { value: "2017", text: "2017" },
+        { value: "2018", text: "2018" },
+        { value: "2019", text: "2019" },
+        { value: "2020", text: "2020" },
+        { value: "2021", text: "2021" },
       ],
-      monthFilters: [
+      months: [
         { value: "01", text: "Jan" },
         { value: "02", text: "Feb" },
         { value: "03", text: "Mar" },
@@ -78,18 +83,19 @@ export default {
   },
   methods: {
     handleSelectYear(year) {
-      console.log('handle year selected', year)
-      console.log('handle year selected', year)
+      // console.log("handle year selkected", year);
+      // console.log("handle year selected", year);
       this.yearSelected = year;
-      console.log("yearSelected", this.yearSelected)
-      this.$emit("filter", this.yearSelected, this.monthSelected);
+      // console.log("yearSelected", this.yearSelected);
+      this.filterCallbackHandler(this.yearSelected, this.monthSelected);
     },
     handleSelectMonth(month) {
-      console.log('handle year selected', month)
-      this.monthSelected = `${month}`;
-      console.log("monthSelected", this.monthSelected)
+      // console.log("handle year selected", month);
+      this.monthSelected = month;
+      // console.log("monthSelected", this.monthSelected);
 
-      this.$emit("filter", this.yearSelected, this.monthSelected);
+      this.filterCallbackHandler(this.yearSelected, this.monthSelected);
+      // this.$emit("filter", this.yearSelected, this.monthSelected);
     },
   },
 };

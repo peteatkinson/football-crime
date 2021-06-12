@@ -17,16 +17,23 @@ Vue.use(VueAxios, axios)
 
 const store = new Vuex.Store({
   state: {
-    crimes: []
+    stadiumCrimes: [],
+    loading: false
   },
   mutations: {
-    updateCrimes (state, payload) {
-      state.crimes = payload
+    updateStadiumCrimes (state, payload) {
+      state.stadiumCrimes = payload
+    },
+    updateLoading (state, payload) {
+      state.loading = payload
     }
   },
   actions: {
-    updateCrimes({commit}, payload) {
-      commit("updateCrimes", payload)
+    updateStadiumCrimes({commit}, payload) {
+      commit("updateStadiumCrimes", payload)
+    },
+    updateLoading({commit}, payload) {
+      commit("updateLoading", payload);
     }
   }
 })

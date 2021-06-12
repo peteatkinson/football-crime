@@ -1,12 +1,17 @@
 <template>
-  <div class="stadium-crimes-table">
-    <div v-if="loading" class="loading-spinner__mask">
+  <div class="table">
+    <div v-if="loading" class="table__loading-spinner--mask">
       <LoadingSpinner />
     </div>
 
-    <vs-table v-else striped v-model="selected">
+    <vs-table striped v-model="selected">
       <template #header>
-        <Filters v-on:filter="handleFilter" default-month="01" default-year="2021" />
+        <Filters
+          :filter-callback-handler="getStadiumCrimesByYearMonth"
+          default-month="01"
+          default-year="2021"
+          :total-count="rows.length"
+        />
       </template>
       <template #thead>
         <vs-tr>
@@ -56,6 +61,9 @@
 <script>
 import LoadingSpinner from "./LoadingSpinner.vue";
 import Filters from "./Filters.vue";
+import { mapActions, mapState } from "vuex";
+import { mapStadiumCrimeToTableRow } from "../utils/table";
+
 export default {
   name: "StadiumCrimeTable",
   components: {
@@ -63,43 +71,33 @@ export default {
     Filters,
   },
   methods: {
+    ...mapActions(["updateLoading", "updateStadiumCrimes"]),
     beforeMount() {
-      this.getStadiumCrimes('2021', '01')
+      this.getStadiumCrimesByYearMonth("2021", "01");
     },
-    handleFilter(year, month) {
-      this.getStadiumCrimes(year, month);
-    },
-    getStadiumCrimes(year, month) {
-      this.loading = true;
+    getStadiumCrimesByYearMonth(year, month) {
+      this.updateLoading(true);
 
       this.axios
         .get(
           `http://localhost:5722/api/stadium-crimes?year=${year}&month=${month}`
         )
         .then((response) => {
-          this.data = response.data;
-          this.loading = false;
+          this.updateStadiumCrimes(response.data);
+          this.rows = this.stadiumCrimes.map((sc) =>
+            mapStadiumCrimeToTableRow(sc)
+          );
+          this.updateLoading(false);
         });
     },
   },
   computed: {
-    rows() {
-      return this.data.map((sc) => {
-        const { stadium, crimes } = sc
-        return {
-          id: stadium.id,
-          stadiumName: stadium.name,
-          addressStreet: stadium.address.street,
-          crimesCount: crimes.length,
-        };
-      });
-    },
+    ...mapState(["loading", "stadiumCrimes"]),
   },
   data() {
     return {
-      loading: false,
       selected: null,
-      data: [],
+      rows: [],
     };
   },
 };
