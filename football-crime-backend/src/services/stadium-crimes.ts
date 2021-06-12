@@ -4,7 +4,6 @@ import { getStadiumsBySeason } from '@/services/stadiums'
 import { InMemoryCache } from '@/utils/cache'
 import { Crimes, StadiumCrimes } from '@/presentation/models/crime'
 
-
 /**
  * Retrieves a list of stadium crimes filtered by year/month
  * @param year in format XXXX
