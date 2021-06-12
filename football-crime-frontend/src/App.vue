@@ -1,7 +1,11 @@
 <template>
   <div id="app">
+     <Modal :data="selectedStadium" v-if="!loading && selectedStadium != null" />
+     <div v-if="loading">
+      <LoadingSpinner />
+    </div>
     <StadiumCrimeTable />
-  </div>
+</div>
 </template>
 
 <script>
@@ -9,10 +13,19 @@ import StadiumCrimeTable from './components/StadiumCrimeTable.vue'
 
 import LoadingSpinner from './components/LoadingSpinner.vue'
 
+import Modal from './components/Modal.vue'
+
+import { mapState } from 'vuex'
+
 export default {
   name: 'App',
+  computed: {
+    ...mapState(['loading', 'modalsConfig', 'selectedStadium'])
+  },
   components: {
-    StadiumCrimeTable
+    StadiumCrimeTable,
+    LoadingSpinner,
+    Modal
   },
   mounted() {
     this.$vs.setTheme('dark')

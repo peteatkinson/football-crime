@@ -1,10 +1,6 @@
 <template>
   <div class="table">
-    <div v-if="loading" class="table__loading-spinner--mask">
-      <LoadingSpinner />
-    </div>
-
-    <vs-table striped v-model="selected">
+    <vs-table class="table" striped v-model="selected">
       <template #header>
         <Filters
           :filter-callback-handler="getStadiumCrimesByYearMonth"
@@ -15,15 +11,17 @@
       </template>
       <template #thead>
         <vs-tr>
-          <vs-th sort @click="rows = $vs.sortData($event, rows, 'stadiumName')">
+          <vs-th sort @click="rows = $vs.sortData($event, rows, 'stadium')">
             Stadium
           </vs-th>
+
           <vs-th
             sort
-            @click="rows = $vs.sortData($event, rows, 'addressStreet')"
+            @click="rows = $vs.sortData($event, rows, 'street')"
           >
             Address
           </vs-th>
+
           <vs-th sort @click="rows = $vs.sortData($event, rows, 'crimesCount')">
             Crimes
           </vs-th>
@@ -37,10 +35,10 @@
           :is-selected="selected == tr"
         >
           <vs-td>
-            {{ tr.stadiumName }}
+            {{ tr.stadium }}
           </vs-td>
           <vs-td>
-            {{ tr.addressStreet }}
+            {{ tr.team }}
           </vs-td>
           <vs-td>
             {{ tr.crimesCount }}
@@ -59,7 +57,6 @@
 </template>
 
 <script>
-import LoadingSpinner from "./LoadingSpinner.vue";
 import Filters from "./Filters.vue";
 import { mapActions, mapState } from "vuex";
 import { mapStadiumCrimeToTableRow } from "../utils/table";
@@ -67,11 +64,24 @@ import { mapStadiumCrimeToTableRow } from "../utils/table";
 export default {
   name: "StadiumCrimeTable",
   components: {
-    LoadingSpinner,
-    Filters,
+    Filters
+  },
+  watch: {
+    selected(){
+      this.updateLoading(true)
+
+      const stadium = this.stadiumCrimes.filter((sc) => sc.stadium.id == this.selected.id)[0]
+      if(stadium != null) {
+        //  update selected stadium
+        console.log(stadium)
+      }
+      this.updateSelectedStadium(stadium)
+
+      this.updateLoading(false)
+    }
   },
   methods: {
-    ...mapActions(["updateLoading", "updateStadiumCrimes"]),
+    ...mapActions(["updateLoading", "updateStadiumCrimes", "updateSelectedStadium"]),
     beforeMount() {
       this.getStadiumCrimesByYearMonth("2021", "01");
     },
@@ -103,10 +113,15 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
-::v-deep {
-  table {
-    color: #fff;
+<style lang="scss">
+::v-deep .vs-table__th {
+  display: none !important;
+  .vs-table__th__content {
+    display: none;
   }
+}
+
+table {
+  color: #fff;
 }
 </style>
