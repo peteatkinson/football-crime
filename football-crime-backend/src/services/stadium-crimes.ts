@@ -41,8 +41,8 @@ const getStadiumCrimesByYearMonth = async (year: string, month: string): Promise
   }
 
   // resolve all promises
-  const crimes = await Promise.all(promises)
-
+  const crimes = await Promise.all(promises).catch((err) => null)
+  console.log('crimes: ', crimes)
   // if there are any crimes
   if (crimes && crimes.length > 0) {
     // plug in each collection of crimes

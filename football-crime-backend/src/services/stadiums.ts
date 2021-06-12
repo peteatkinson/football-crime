@@ -1,7 +1,7 @@
 import { FootballDataClient } from '@/clients/football-data/client'
 import { getAddressesByPostcodes } from '@/services/address'
 
-import { Stadium, Address } from '@/presentation/models/football'
+import { Stadium, Address, Team } from '@/presentation/models/football'
 
 /**
  * Retrieves stadium information filtered by season
@@ -29,7 +29,16 @@ const getStadiumsBySeason = async (season: string): Promise<Stadium[]> => {
       const postcode = address.substring(index)
       const street = address.substring(0, index)
 
+      // create the associated team with the stadium
+      const stadiumTeam = new Team()
+      stadiumTeam.crestUrl = team.crestUrl
+      stadiumTeam.founded = team.founded
+      stadiumTeam.name = team.name
+      stadiumTeam.shortName = team.shortName
+
       stadium.address = new Address(street, postcode)
+      stadium.team = stadiumTeam
+
       return stadium
     })
 

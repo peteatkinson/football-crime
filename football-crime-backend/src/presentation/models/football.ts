@@ -2,6 +2,7 @@ export class Stadium {
   id: number
   name: string
   address?: Address
+  team?: Team
   constructor (id: number, name: string) {
     this.id = id
     this.name = name
