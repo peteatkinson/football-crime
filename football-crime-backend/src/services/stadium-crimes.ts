@@ -4,6 +4,7 @@ import { getStadiumsBySeason } from '@/services/stadiums'
 import { InMemoryCache } from '@/utils/cache'
 import { Crimes, StadiumCrimes } from '@/presentation/models/crime'
 
+
 /**
  * Retrieves a list of stadium crimes filtered by year/month
  * @param year in format XXXX
@@ -22,8 +23,6 @@ const getStadiumCrimesByYearMonth = async (year: string, month: string): Promise
   if (cache != null) {
     return cache
   }
-
-  console.log('hello')
 
   // find all stadiums by the season/year
   const stadiums = await getStadiumsBySeason(year)
@@ -44,7 +43,6 @@ const getStadiumCrimesByYearMonth = async (year: string, month: string): Promise
 
   // resolve all promises
   const crimes = await Promise.all(promises)
-  console.log('crimes: ', crimes)
   // if there are any crimes
   if (crimes && crimes.length > 0) {
     // plug in each collection of crimes

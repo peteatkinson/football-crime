@@ -12,8 +12,6 @@ const getTeamById = async (id: number): Promise<Team> => {
 
   const data = await FootballDataClient.getTeam(id)
 
-  console.log('data: ', data)
-
   let team: Team = null
   if (data !== null) {
     team = new Team()
