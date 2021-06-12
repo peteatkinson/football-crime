@@ -1,5 +1,6 @@
 import express, { Router, Request, Response, NextFunction, Express, json } from 'express'
 import * as stadiumCrimesController from '@/presentation/controllers/stadium-crimes'
+import * as teamController from '@/presentation/controllers/team'
 
 class AppBuilder {
   private readonly app: Express
@@ -45,6 +46,7 @@ class AppBuilder {
   withRoutes (): AppBuilder {
     const router = Router()
     router.get('/stadium-crimes', stadiumCrimesController.getStadiumCrimesHandler)
+    router.get('/team', teamController.getTeamByIdHandler)
     this.app.use('/api', router)
     return this
   }

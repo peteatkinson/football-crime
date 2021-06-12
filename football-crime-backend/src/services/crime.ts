@@ -23,7 +23,12 @@ const getCrimesByLocation = async (lat: number, long: number, date: string): Pro
   // if there are any crimes
   if (crimes && crimes.length > 0) {
     // map the resulting crimes to a new model
-    result.crimes = crimes.map((crime) => new Crime(crime.category))
+    result.crimes = crimes.map((crime) => new Crime(
+      crime.category,
+      crime.month,
+      crime.outcome_status ? crime.outcome_status.category : '',
+      crime.location.street.name
+    ))
   }
 
   return result

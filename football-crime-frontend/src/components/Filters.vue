@@ -41,7 +41,7 @@ export default {
     defaultMonth: String,
     defaultYear: String,
     totalCount: Number,
-    filterCallbackHandler: Function,
+    callback: Function,
   },
   computed: {
     filterTotalCountText() {
@@ -83,19 +83,14 @@ export default {
   },
   methods: {
     handleSelectYear(year) {
-      // console.log("handle year selkected", year);
-      // console.log("handle year selected", year);
       this.yearSelected = year;
-      // console.log("yearSelected", this.yearSelected);
-      this.filterCallbackHandler(this.yearSelected, this.monthSelected);
+
+      this.callback(this.yearSelected, this.monthSelected);
     },
     handleSelectMonth(month) {
-      // console.log("handle year selected", month);
       this.monthSelected = month;
-      // console.log("monthSelected", this.monthSelected);
 
-      this.filterCallbackHandler(this.yearSelected, this.monthSelected);
-      // this.$emit("filter", this.yearSelected, this.monthSelected);
+      this.callback(this.yearSelected, this.monthSelected);
     },
   },
 };

@@ -25,6 +25,8 @@ export class ApiClient {
       })
     }
 
+    console.log(url.toString())
+
     return await fetch(url.toString(), { method: 'GET', headers: headers })
   }
 

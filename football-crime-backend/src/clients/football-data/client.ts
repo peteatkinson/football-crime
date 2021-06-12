@@ -1,9 +1,10 @@
-import { ICompetitionMatches, ICompetitionTeams } from './types'
+import { ICompetitionMatches, ICompetitionTeams, ITeam } from './types'
 import { ApiClient } from '../api'
 
 interface IFootballDataClient {
   getTeams: (season: string) => Promise<ICompetitionTeams>
   getMatches: (season: string) => Promise<ICompetitionMatches>
+  getTeam: (id: number) => Promise<ITeam>
 }
 
 class FootballDataClient extends ApiClient implements IFootballDataClient {
@@ -22,6 +23,20 @@ class FootballDataClient extends ApiClient implements IFootballDataClient {
 
   static get instance () {
     return this._instance || (this._instance = new this())
+  }
+
+  async getTeam (id: number): Promise<ITeam> {
+    const response = await this.get(`/v2/teams/${id}/`, {}, this.httpHeaders)
+
+    let team: ITeam = null
+
+    if (response.ok) {
+      const json = await response.text()
+
+      team = JSON.parse(json)
+    }
+
+    return team
   }
 
   async getTeams (season: string): Promise<ICompetitionTeams> {

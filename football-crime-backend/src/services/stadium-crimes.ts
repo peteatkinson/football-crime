@@ -23,6 +23,8 @@ const getStadiumCrimesByYearMonth = async (year: string, month: string): Promise
     return cache
   }
 
+  console.log('hello')
+
   // find all stadiums by the season/year
   const stadiums = await getStadiumsBySeason(year)
 
@@ -41,7 +43,7 @@ const getStadiumCrimesByYearMonth = async (year: string, month: string): Promise
   }
 
   // resolve all promises
-  const crimes = await Promise.all(promises).catch((err) => null)
+  const crimes = await Promise.all(promises)
   console.log('crimes: ', crimes)
   // if there are any crimes
   if (crimes && crimes.length > 0) {

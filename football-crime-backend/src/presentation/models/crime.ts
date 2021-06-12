@@ -2,8 +2,15 @@ import { Stadium } from './football'
 
 export class Crime {
   category?: string
-  constructor (category: string) {
+  when?: string
+  outcome?: string
+  where?: string
+
+  constructor (category: string, when: string, outcome: string, where: string) {
     this.category = category
+    this.when = when
+    this.outcome = outcome
+    this.where = where
   }
 }
 

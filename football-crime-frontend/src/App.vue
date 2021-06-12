@@ -4,12 +4,12 @@
      <div v-if="loading">
       <LoadingSpinner />
     </div>
-    <StadiumCrimeTable />
+    <StadiumTable />
 </div>
 </template>
 
 <script>
-import StadiumCrimeTable from './components/StadiumCrimeTable.vue'
+import StadiumTable from './components/StadiumTable.vue'
 
 import LoadingSpinner from './components/LoadingSpinner.vue'
 
@@ -20,10 +20,10 @@ import { mapState } from 'vuex'
 export default {
   name: 'App',
   computed: {
-    ...mapState(['loading', 'modalsConfig', 'selectedStadium'])
+    ...mapState(['loading', 'selectedStadium'])
   },
   components: {
-    StadiumCrimeTable,
+    StadiumTable,
     LoadingSpinner,
     Modal
   },

@@ -3,7 +3,7 @@
     <vs-table class="table" striped v-model="selected">
       <template #header>
         <Filters
-          :filter-callback-handler="getStadiumCrimesByYearMonth"
+          :callback="request"
           default-month="01"
           default-year="2021"
           :total-count="rows.length"
@@ -15,10 +15,7 @@
             Stadium
           </vs-th>
 
-          <vs-th
-            sort
-            @click="rows = $vs.sortData($event, rows, 'street')"
-          >
+          <vs-th sort @click="rows = $vs.sortData($event, rows, 'street')">
             Address
           </vs-th>
 
@@ -46,58 +43,75 @@
         </vs-tr>
       </template>
     </vs-table>
-
-    <span class="data">
-      <pre>
-  {{ selected ? selected : "Select an item in the table" }}
-        </pre
-      >
-    </span>
   </div>
 </template>
 
 <script>
 import Filters from "./Filters.vue";
 import { mapActions, mapState } from "vuex";
-import { mapStadiumCrimeToTableRow } from "../utils/table";
+import { ApiClient } from "../api/api-client";
+import LoadingMixin from "../mixins/LoadingMixin";
 
 export default {
-  name: "StadiumCrimeTable",
+  name: "StadiumTable",
+  mixins: [LoadingMixin],
   components: {
-    Filters
+    Filters,
   },
   watch: {
-    selected(){
-      this.updateLoading(true)
+    selected() {
+      this.toggleSpinner();
 
-      const stadium = this.stadiumCrimes.filter((sc) => sc.stadium.id == this.selected.id)[0]
-      if(stadium != null) {
+      const stadium = this.stadiumCrimes.filter(
+        (sc) => sc.stadium.id == this.selected.id
+      )[0];
+      if (stadium != null) {
         //  update selected stadium
-        console.log(stadium)
-      }
-      this.updateSelectedStadium(stadium)
+        this.apiClient
+          .getTeam(this.selected.id)
+          .then((response) => {
+            const { data } = response;
+            stadium["squad"] = data.squad
+            this.toggleSpinner();
+          })
+          .catch((err) => {
+            this.toggleSpinner();
+          });
 
-      this.updateLoading(false)
-    }
+        this.updateSelectedStadium(stadium);
+      } else {
+        this.toggleSpinner();
+      }
+
+    },
   },
   methods: {
-    ...mapActions(["updateLoading", "updateStadiumCrimes", "updateSelectedStadium"]),
+    ...mapActions(["updateStadiumCrimes", "updateSelectedStadium"]),
     beforeMount() {
-      this.getStadiumCrimesByYearMonth("2021", "01");
+      this.request("2021", "01");
     },
-    getStadiumCrimesByYearMonth(year, month) {
-      this.updateLoading(true);
-
-      this.axios
-        .get(
-          `http://localhost:5722/api/stadium-crimes?year=${year}&month=${month}`
-        )
+    request(year, month) {
+      this.toggleSpinner();
+      this.apiClient
+        .getStadiumCrimes(year, month)
         .then((response) => {
           this.updateStadiumCrimes(response.data);
-          this.rows = this.stadiumCrimes.map((sc) =>
-            mapStadiumCrimeToTableRow(sc)
-          );
-          this.updateLoading(false);
+          this.rows = this.stadiumCrimes.map((sc) => {
+            const { stadium, crimes } = sc;
+
+            return {
+              id: stadium.id,
+              stadium: stadium.name,
+              street: stadium.address.street,
+              crimesCount: crimes.length,
+              team: stadium.team.name,
+              teamCrestUrl: stadium.team.crestUrl,
+            };
+          });
+          this.toggleSpinner();
+        })
+        .catch((err) => {
+          this.toggleSpinner();
         });
     },
   },
@@ -108,6 +122,7 @@ export default {
     return {
       selected: null,
       rows: [],
+      apiClient: new ApiClient(this.axios),
     };
   },
 };

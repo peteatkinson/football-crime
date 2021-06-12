@@ -21,7 +21,7 @@ export interface ICompetitionArea {
   name: string
 }
 
-export interface ITeam {
+export interface ICompetitionTeam {
   id: number
   name: string
   shortName: string
@@ -40,7 +40,7 @@ export interface ITeam {
 export interface ICompetitionTeams {
   count: number
   season: ISeason
-  teams: ITeam[]
+  teams: ICompetitionTeam[]
   competition: ICompetition
 }
 
@@ -64,6 +64,28 @@ export interface IMatch {
 }
 
 export interface IMatchTeam {
+  id: number
+  name: string
+}
+
+export interface ITeam {
+  id: number
+  activeCompetitions: ITeamActiveCompetition[]
+  squad: ITeamPlayer[]
+}
+
+export interface ITeamPlayer {
+  id: number
+  name: string
+  position: string
+  dateOfBirth: string
+  countryOfBirth: string
+  nationality: string
+  shirtNumber: number
+  role: string
+}
+
+export interface ITeamActiveCompetition {
   id: number
   name: string
 }
