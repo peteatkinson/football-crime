@@ -90,9 +90,29 @@ The backend project contains:
 - `PORT` - this is the default port that the API runs on 
 - `FOOTBALL_DATA_API_KEY` - this is the API key for the https://api.football-data.org service. You may use your own here. Or if you need the API key used for this project I can send it to you on request.
 
+## Build
+Finally, once you have all dependnecies for all projects. You can then build each project seperately. To do this,
+
+Run the following commands: 
+
+```
+cd /football-crime-backend
+npm run build
+npm run start
+```
+then
+```
+cd ../football-crime-frontend/
+npm run serve
+```
+
+Your applications should now be available on localhost
+
 ## License
 
 None
+
+....
 
 If you have any queries, questions. Please do let me know :)
 
