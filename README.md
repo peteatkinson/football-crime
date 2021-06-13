@@ -29,7 +29,7 @@ npm install
 The backend solution is built in NodeJS and makes use of Express for it's API routing and utilizes TypeScript across the codebase.
 
 I've tried to construct the architecture from 'Clean Architecture Patterns' and make use of service-oriented architecture, so the directory stucture is as follows:
-
+- `__tests__` - unit tests
 - `/clients` - http wrappers
 - `/config` - application configuration
 - `/presentation` - controllers/models
