@@ -93,3 +93,8 @@ The backend project contains:
 ## License
 
 None
+
+If you have any queries, questions. Please do let me know :)
+
+Thanks
+Pete
