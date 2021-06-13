@@ -1,9 +1,7 @@
 export class ApiClient {
-  constructor($axios) {
-      console.log($axios)
-
+  constructor($axios, baseUrl) {
     this.$axios = $axios;
-    this.baseUrl = "http://localhost:5722/api";
+    this.baseUrl = baseUrl;
   }
 
   getStadiumCrimes(year, month) {

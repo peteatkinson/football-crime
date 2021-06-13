@@ -122,7 +122,7 @@ export default {
     return {
       selected: null,
       rows: [],
-      apiClient: new ApiClient(this.axios),
+      apiClient: new ApiClient(this.axios, process.env.VUE_APP_API_PATH),
     };
   },
 };
