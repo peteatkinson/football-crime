@@ -61,9 +61,9 @@ The following folder structure is as follows:
 - `build` - build the project for production
 - `lint` - lint source files
 
-## Docker Images
+## Docker
 
-I have created two Docker images for both projects. If you so wish to, you can build these images in Docker.
+I have created two Dockerfiles for both projects. If you so wish to, you can build these files in Docker.
 
 They are both located in the /root directory of each project. 
 
