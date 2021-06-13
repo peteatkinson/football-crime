@@ -1,5 +1,6 @@
 import { ICompetitionMatches, ICompetitionTeams, ITeam } from './types'
 import { ApiClient } from '../api'
+import env from '@/config/env'
 
 interface IFootballDataClient {
   getTeams: (season: string) => Promise<ICompetitionTeams>
@@ -12,12 +13,10 @@ class FootballDataClient extends ApiClient implements IFootballDataClient {
 
   private readonly httpHeaders: { [key: string]: string }
 
-  #apiKey: string
-
   private constructor () {
     super('https://api.football-data.org')
     this.httpHeaders = {
-      'X-Auth-Token': '6a61eb72affa483780eabc39ef79391a'
+      'X-Auth-Token': env.footballDataApiKey
     }
   }
 

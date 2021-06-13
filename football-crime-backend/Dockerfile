@@ -14,6 +14,7 @@ WORKDIR /app
 
 # Install app dependencies
 COPY package*.json ./
+COPY .env ./
 
 # perform an npm install to install production dependencies (dev dependencies excluded)
 USER 0
