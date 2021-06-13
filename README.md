@@ -1,4 +1,4 @@
-# Football Crime Application
+# 🚀 🚀  Football Crime Application 🔥 🔥 🔥 
 
 🤲 Repository that contains both the frontend and backend applications for this project.
 
